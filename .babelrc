@@ -5,7 +5,7 @@
       "module-resolver", {
         "root": ["./client"],
         "alias": {
-          "@App": "./client/src/app"
+          "@App": "./client/app/Ui/App"
         }
       }
     ]
