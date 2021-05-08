@@ -29,7 +29,9 @@ module.exports = {
           {
             loader: 'postcss-loader',
             options: {
-              plugins: () => [require('cssnano'), require('autoprefixer')]
+              postcssOptions: {
+                plugins: () => [require('cssnano'), require('autoprefixer')]
+              }
             }
           },
           {
@@ -38,7 +40,16 @@ module.exports = {
         ]
       },
       {
-        test: /\.(png|jpg|jpeg|gif|svg|ico)$/,
+        test: /\.svg$/,
+        use: {
+          loader: 'svg-url-loader',
+          options: {
+            encoding: 'base64'
+          }
+        }
+      },
+      {
+        test: /\.(png|jpg|jpeg|gif|ico)$/,
         use: [
           {
             loader: 'file-loader',
@@ -51,7 +62,7 @@ module.exports = {
         ]
       },
       {
-        test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
+        test: /\.(woff(2)?|ttf|eot)(\?v=\d+\.\d+\.\d+)?$/,
         use: [
           {
             loader: 'file-loader',
