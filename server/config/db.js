@@ -13,7 +13,7 @@ const connectDB = async () => {
       useFindAndModify: false
     })
 
-    console.log(`${chalk.green('✓')} ${chalk.blue('MongoDB Connected')} ${connect.connection.host}`)
+    console.log(`${chalk.green('OK')} ${chalk.blue('MongoDB Connected')} ${connect.connection.host}`)
   } catch (error) {
     console.log(`Error: ${error.message}`)
   }

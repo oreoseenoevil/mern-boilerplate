@@ -63,7 +63,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 app.listen(port, () => {
   console.log(
-    `${chalk.green('✓')} ${chalk.blue(
+    `${chalk.green('OK')} ${chalk.blue(
       `Listening on port ${port}. Visit http://localhost:${port}/ in your browser.`
     )}`
   )
