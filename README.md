@@ -18,20 +18,20 @@ $ touch .env
 $ copy env.example .env
 ```
 
+## Configure or Add your MONGODB URI, API & SECRET
+
+```
+  * MONGO_URI & ACCESS_TOKEN_SECRET & REFRESH_TOKEN_SECRET => configuration
+  * PORT & BASE_SERVER_URL & BASE_API_URL & BASE_CLIENT_URL
+  * CLOUD_NAME & CLOUD_API_KEY & CLOUD_API_SECRET => cloudinary configuration
+```
+
 ## Install
 
 Some basic Git commands are:
 
 ```
 $ npm install
-```
-
-## Configure or Add your URI, API & SECRET
-
-```
-  * MONGO_URI & ACCESS_TOKEN_SECRET & REFRESH_TOKEN_SECRET => configuration
-  * PORT & BASE_SERVER_URL & BASE_API_URL & BASE_CLIENT_URL
-  * CLOUD_NAME & CLOUD_API_KEY & CLOUD_API_SECRET => cloudinary configuration
 ```
 
 ## Run the application for development
