@@ -14,7 +14,6 @@ $ cd mern-boilerplate
 ## Setup
 
 ```
-$ touch .env
 $ copy env.example .env
 ```
 
@@ -23,7 +22,7 @@ $ copy env.example .env
 ```json
 {
   [
-    "module-resolver", {
+    "module-resolver": {
       "root": ["./client"],
       "alias": {
         "@App": "./client/app/Ui/App"
