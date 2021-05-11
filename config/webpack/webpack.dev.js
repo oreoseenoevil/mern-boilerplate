@@ -8,7 +8,7 @@ module.exports = {
   mode: 'development',
   entry: ['webpack-hot-middleware/client?reload=true'],
   output: {
-    path: path.join(CURRENT_WORKING_DIR, '/dist'),
+    path: path.join(CURRENT_WORKING_DIR, 'dist'),
     filename: '[name].js',
     publicPath: '/'
   },
@@ -72,17 +72,17 @@ module.exports = {
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
-      template: path.join(CURRENT_WORKING_DIR, '/client/public/index.html'),
+      template: path.join(CURRENT_WORKING_DIR, 'client/public/index.html'),
       inject: true
     })
   ],
   devServer: {
     port: 5000,
+    hot: true,
     open: true,
     inline: true,
     compress: true,
     noInfo: true,
-    hot: true,
     disableHostCheck: false,
     historyApiFallback: true,
     proxy: {
