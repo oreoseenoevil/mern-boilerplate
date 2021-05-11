@@ -18,6 +18,23 @@ $ touch .env
 $ copy env.example .env
 ```
 
+## Setting up .babelrc
+
+```json
+{
+  [
+    "module-resolver", {
+      "root": ["./client"],
+      "alias": {
+        "@App": "./client/app/Ui/App"
+        // You can add more directories to be more aesthetic
+        // (i.e.) import { App } from '@App
+      }
+    }
+  ]
+}
+```
+
 ## Configure or Add your MONGODB URI, API & SECRET
 
 ```
@@ -38,6 +55,13 @@ $ npm install
 
 ```
 $ npm start
+```
+
+## Heroku Deployment
+
+```
+> Move devDependencies to dependencies
+> Create a Procfile in the root directory of your application with the following command **web: npm run start:production**
 ```
 
 ## Languages & tools
@@ -66,10 +90,10 @@ $ npm start
   "editor.tabSize": 2,
   "editor.wordWrap": "on",
   "files.eol": "\n",
-  "prettier.jsxSingleQuote": true
+  "prettier.jsxSingleQuote": true,
   // Enable this once you're on the client folder/react
-  // "emmet.includeLanguages": {
-  //   "javascript": "javascriptreact"
-  // }
+  "emmet.includeLanguages": {
+    "javascript": "javascriptreact"
+  }
 }
 ```
