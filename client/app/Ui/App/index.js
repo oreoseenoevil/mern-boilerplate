@@ -1,7 +1,11 @@
 import React from 'react'
+import { hot } from 'react-hot-loader'
+import '@App/index.scss'
 
-export const App = () => {
+const App = () => {
   return (
-    <h1>Hello World</h1>
+    <h1>Mern Starter Pack</h1>
   )
 }
+
+export default hot(module)(App)

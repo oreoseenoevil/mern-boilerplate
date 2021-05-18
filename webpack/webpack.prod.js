@@ -1,41 +1,32 @@
 const path = require('path')
-const webpack = require('webpack')
-const TerserPlugin = require('terser-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const WebpackPwaManifest = require('webpack-pwa-manifest')
+const webpack = require('webpack')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
 
 const CURRENT_WORKING_DIR = process.cwd()
-const NODE_ENV = process.env.NODE_ENV
-const BASE_API_URL = process.env.BASE_API_URL
 
 module.exports = {
   mode: 'production',
   output: {
-    path: path.join(CURRENT_WORKING_DIR, '/dist'),
-    filename: 'js/[name].[hash].js',
+    path: path.join(CURRENT_WORKING_DIR, 'dist'),
+    filename: 'js/[name].[chunkhash].js',
     publicPath: '/'
   },
   module: {
     rules: [
       {
-        test: /\.(scss|sass|css)$/,
+        test: /\.(scss|sass|css)$/i,
         use: [
           MiniCssExtractPlugin.loader,
-          {
-            loader: 'css-loader'
-          },
+          'css-loader',
+          'sass-loader',
           {
             loader: 'postcss-loader',
             options: {
-              postcssOptions: {
-                plugins: () => [require('cssnano'), require('autoprefixer')]
-              }
+              sourceMap: true
             }
-          },
-          {
-            loader: 'sass-loader'
           }
         ]
       },
@@ -44,7 +35,10 @@ module.exports = {
         use: {
           loader: 'svg-url-loader',
           options: {
-            encoding: 'base64'
+            encoding: 'base64',
+            outputPath: 'svg',
+            publicPath: '../svg',
+            name: '[name].[chunkhash].[ext]'
           }
         }
       },
@@ -56,7 +50,7 @@ module.exports = {
             options: {
               outputPath: 'images',
               publicPath: '../images',
-              name: '[name].[hash].[ext]'
+              name: '[name].[chunkhash].[ext]'
             }
           }
         ]
@@ -69,17 +63,12 @@ module.exports = {
             options: {
               outputPath: 'fonts',
               publicPath: '../fonts',
-              name: '[name].[hash].[ext]'
+              name: '[name].[chunkhash].[ext]'
             }
           }
         ]
       }
     ]
-  },
-  performance: {
-    hints: false,
-    maxEntrypointSize: 512000,
-    maxAssetSize: 512000
   },
   optimization: {
     minimize: true,
@@ -120,12 +109,7 @@ module.exports = {
     ]
   },
   plugins: [
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify(NODE_ENV),
-        BASE_API_URL: JSON.stringify(BASE_API_URL)
-      }
-    }),
+    new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
       template: path.join(CURRENT_WORKING_DIR, 'client/public/index.html'),
       inject: true,
@@ -140,32 +124,10 @@ module.exports = {
         minifyJS: true,
         minifyCSS: true,
         minifyURLs: true
-      }
+      }      
     }),
     new MiniCssExtractPlugin({
-      filename: 'css/[name].[hash].css'
-    }),
-    new WebpackPwaManifest({
-      name: 'MERN Store',
-      short_name: 'MERNStore',
-      description: 'MERN Store!',
-      background_color: '#fff',
-      theme_color: '#4a68aa',
-      inject: true,
-      ios: true,
-      icons: [
-        {
-          src: path.resolve('client/public/images/pwa.png'),
-          destination: 'images',
-          sizes: [72, 96, 128, 144, 192, 384, 512]
-        },
-        {
-          src: path.resolve('client/public/images/pwa.png'),
-          sizes: [120, 152, 167, 180],
-          destination: 'images',
-          ios: true
-        }
-      ]
+      filename: 'css/[name].[chunkhash].css'
     }),
     new CssMinimizerPlugin({
       minimizerOptions: {

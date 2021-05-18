@@ -1,12 +1,12 @@
 const path = require('path')
-const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const webpack = require('webpack')
 
 const CURRENT_WORKING_DIR = process.cwd()
 
 module.exports = {
   mode: 'development',
-  entry: ['webpack-hot-middleware/client?reload=true'],
+  entry: ['react-hot-loader/patch', 'webpack-hot-middleware/client?reload=true&overlay=true'],
   output: {
     path: path.join(CURRENT_WORKING_DIR, 'dist'),
     filename: '[name].js',
@@ -15,22 +15,16 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(scss|sass|css)$/,
+        test: /\.(scss|sass|css)$/i,
         use: [
           'style-loader',
-          {
-            loader: 'css-loader'
-          },
+          'css-loader',
+          'sass-loader',
           {
             loader: 'postcss-loader',
             options: {
-              postcssOptions: {
-                plugins: () => [require('autoprefixer')]
-              }
+              sourceMap: true
             }
-          },
-          {
-            loader: 'sass-loader'
           }
         ]
       },
@@ -71,10 +65,10 @@ module.exports = {
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
     new HtmlWebpackPlugin({
-      template: path.join(CURRENT_WORKING_DIR, 'client/public/index.html'),
-      inject: true
-    })
+      template: path.join(CURRENT_WORKING_DIR, 'client/public/index.html')
+    }),
   ],
   devServer: {
     port: 5000,
@@ -83,11 +77,11 @@ module.exports = {
     inline: true,
     compress: true,
     noInfo: true,
-    disableHostCheck: false,
     historyApiFallback: true,
+    disableHostCheck: false,
     proxy: {
       '/api': 'http://localhost:5000'
     }
   },
-  devtool: 'eval-source-map'
+  devtool: 'inline-source-map'
 }
