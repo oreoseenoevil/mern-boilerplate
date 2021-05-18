@@ -19,7 +19,16 @@
       "module-resolver", {
         "root": ["./client"],
         "alias": {
-          "@App": "./client/app/Ui/App"
+          "@App": "./client/app/Ui/App",
+          "@Context": "./client/app/Context",
+          "@SignIn": "./client/app/Components/SignIn",
+          "@SignUp": "./client/app/Components/SignUp",
+          "@Dashboard": "./client/app/Components/Dashboard",
+          "@Home": "./client/app/Components/Home",
+          "@Header": "./client/app/Components/Header",
+          "@Helpers": "./client/app/Helpers",
+          "@Utils": "./client/app/Utils",
+          "@Routes": "./client/app/Routes"
         }
       }
     ]
