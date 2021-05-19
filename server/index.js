@@ -27,6 +27,9 @@ app.use(fileUpload({
   useTempFiles: true
 }))
 
+// Routes
+app.use('/api', require('./routes/auth'))
+
 if (process.env.NODE_ENV !== 'production') {
   const compiler = webpack(webpackConfig)
 
