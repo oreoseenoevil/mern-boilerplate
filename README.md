@@ -3,6 +3,7 @@
 ## Description
 
 A MERN Starter Boilerplate:
+Features: Frontend and Backend Authentication (jwt)
 
 ## Clone this Repo
 
