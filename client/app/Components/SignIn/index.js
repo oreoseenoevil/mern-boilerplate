@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
 import CssBaseline from '@material-ui/core/CssBaseline'
@@ -13,7 +13,7 @@ import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
 
-import { login } from '@Utils'
+import { AuthContext } from '@Context/Auth'
 
 function Copyright() {
   return (
@@ -51,6 +51,8 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export const SignIn = () => {
+  const { loginUser } = useContext(AuthContext)
+
   const [user, setUser] = useState({
     email: '',
     password: ''
@@ -61,11 +63,9 @@ export const SignIn = () => {
     setUser({...user, [name]:value})
   }
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault()
-    login(user.email)
-
-    window.location.href = '/dashboard'
+    loginUser(user)
   }
 
   const classes = useStyles()

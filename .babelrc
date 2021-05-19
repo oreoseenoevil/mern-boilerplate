@@ -21,6 +21,7 @@
         "alias": {
           "@App": "./client/app/Ui/App",
           "@Context": "./client/app/Context",
+          "@Reducer": "./client/app/Reducer",
           "@SignIn": "./client/app/Components/SignIn",
           "@SignUp": "./client/app/Components/SignUp",
           "@Dashboard": "./client/app/Components/Dashboard",
