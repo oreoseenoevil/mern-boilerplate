@@ -70,24 +70,16 @@ const authController = {
         }, (err, token) => {
 
           res.cookie('mern_session', token, {
-            httpOnly: true,
+            httpOnly: production,
             path: '/',
             maxAge: 7*24*60*60*100,
             secure: production,
-            sameSite: true
-          })
-
-          res.cookie('dotcom_user', user.username, {
-            httpOnly: true,
-            path: '/',
-            maxAge: 7*24*60*60*100,
-            secure: production,
-            sameSite: true
+            sameSite: production
           })
 
           return res.status(201).json({
             success: true,
-            data: `Bearer ${token}`
+            data: token
           })
         })
 
@@ -110,9 +102,6 @@ const authController = {
       res.clearCookie('mern_session', {
         path: '/'
       })
-      res.clearCookie('dotcom_user', {
-        path: '/'
-      })
   
       return res.status(200).json({
         success: true,
@@ -125,6 +114,49 @@ const authController = {
       })
     }
   },
+  getToken: (req, res) => {
+    try {
+      const token = req.cookies
+
+      const { mern_session } = token
+
+      jwt.verify(mern_session, secretKey, (err, user) => {
+        if (err) {
+          res.status(403).json({
+            success: false,
+            error: 'Please login to continue'
+          })
+        }
+
+        const accesstoken = createAccessToken({ id: user.id })
+
+        return res.status(200).json({
+          success: true,
+          user: user,
+          token: accesstoken
+        })
+      })
+
+    } catch (error) {
+      if (error.name === 'ValidationError') {
+        const messages = Object.values(error.errors).map(val => val.message)
+
+        return res.status(400).json({
+          success: false,
+          error: messages
+        })
+      } else {
+        return res.status(500).json({
+          success: false,
+          error: 'Server Error'
+        })
+      }
+    }
+  }
+}
+
+const createAccessToken = user => {
+  return jwt.sign(user, secretKey, { expiresIn: '11m' })
 }
 
 module.exports = authController

@@ -1,40 +1,33 @@
-import React, { createContext, useReducer } from 'react'
-import { initialState, AuthReducer } from '@Reducer/Auth'
 import axios from 'axios'
-import { login } from '@Utils'
+import React, { createContext, useEffect, useState } from 'react'
+import { isLogin } from '@Utils'
 
 export const AuthContext = createContext()
 
 export const AuthContextProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(AuthReducer, initialState)
+  const [token, setToken] = useState(false)
 
-  const loginUser = async user => {
-    try {
-      const res = await axios.post('/api/user/login', user)
-      
-      dispatch({
-        type: 'SET_USER',
-        payload: res.data.data
-      })
-
-      login(res.data.data)
-      window.location.href = '/dashboard'
-    } catch (error) {
-      dispatch({
-        type: 'ERROR_AUTH',
-        payload: error.response.data.error
-      })
-    }
-  }
+  useEffect(() => {
+    if (isLogin()) {
+      const refreshToken = async () => {
+        try {
+          const res = await axios.get('/api/user/token')
   
+          setToken(res.data.token)
+
+          setTimeout(() => {
+            refreshToken()
+          }, 10 * 60 * 1000)
+        } catch (error) {
+          console.log(error.response.data.error)
+        }
+      }
+      refreshToken()
+    }
+  }, [])
+
   return (
-    <AuthContext.Provider
-      value={{
-        user: state.user,
-        error: state.error,
-        loginUser
-      }}
-    >
+    <AuthContext.Provider value={{ token }}>
       {children}
     </AuthContext.Provider>
   )

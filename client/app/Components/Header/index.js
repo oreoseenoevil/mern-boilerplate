@@ -1,57 +1,61 @@
 import React from 'react'
-import axios from 'axios'
 import { makeStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
-import Link from '@material-ui/core/Link'
-import '@Header/index.scss'
-
-import { logout, isLogin } from '@Utils'
-import { Fragment } from 'react'
+import { Link, useHistory } from 'react-router-dom'
+import { Button } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+    minWidth: '320px'
+  },
   menuButton: {
     marginRight: theme.spacing(2),
   },
   title: {
     flexGrow: 1,
-  },
+  }
 }))
 
 export const Header = () => {
   const classes = useStyles()
+  const history = useHistory()
 
-  const logoutUser = async () => {
-    await axios.get('/api/user/logout')
-    
-    logout()
-    window.location.href = '/'
+  const gotoSignin = () => {
+    history.push('/signin')
   }
 
-  const LoggedIn = () => {
-    return (
-      <Fragment>
-        <Link
-          onClick={logoutUser}
-          style={{ cursor: 'pointer' }}
-          color="inherit"
-        >
-          Sign out
-        </Link>
-      </Fragment>
-    )
+  const gotoSignup = () => {
+    history.push('/signup')
   }
 
+
+  const linkStyle = {
+    color: 'inherit',
+    textDecoration: 'none'
+  }
+  
   return (
-    <div className="header">
+    <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
-            <Link href="/" color="inherit">Home</Link>
+            <Link to="/" style={linkStyle}>Home</Link>
           </Typography>
-          {isLogin() ? LoggedIn() :
-            <Link href="/signin" color="inherit">Login</Link>}
+          <Button
+            color="inherit"
+            onClick={gotoSignin}
+          >
+            Sign in
+          </Button>
+          <Button
+            color="inherit"
+            onClick={gotoSignup}
+          >
+            Sign up
+          </Button>
         </Toolbar>
       </AppBar>
     </div>

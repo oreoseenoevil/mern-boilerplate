@@ -1,4 +1,5 @@
-import React, { useState, useContext } from 'react'
+import React, { useState } from 'react'
+import axios from 'axios'
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
 import CssBaseline from '@material-ui/core/CssBaseline'
@@ -12,14 +13,14 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
-
-import { AuthContext } from '@Context/Auth'
+import { useHistory } from 'react-router-dom'
+import { login } from '@Utils'
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
+      <Link color="inherit" to="/">
         Your Website
       </Link>{' '}
       {new Date().getFullYear()}
@@ -51,8 +52,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export const SignIn = () => {
-  const { loginUser } = useContext(AuthContext)
-
+  const history = useHistory()
   const [user, setUser] = useState({
     email: '',
     password: ''
@@ -65,7 +65,13 @@ export const SignIn = () => {
 
   const handleSubmit = async e => {
     e.preventDefault()
-    loginUser(user)
+    try {
+      const res = await axios.post('/api/user/login', { ...user})
+      login(res.data.data)
+      history.push('/dashboard')
+    } catch (error) {
+      console.log(error.response.data.error)
+    }
   }
 
   const classes = useStyles()

@@ -23,7 +23,7 @@
     "react"
   ],
   "rules": {
-    "camelcase": ["error", { "properties": "never" }],
+    "camelcase": ["error", { "properties": "never", "ignoreDestructuring": true }],
     "comma-spacing": ["error", { "before": false, "after": true }],
     "computed-property-spacing": ["error", "never"],
     "curly": ["error", "multi-line"],
