@@ -10,13 +10,13 @@ const authController = {
       const userExist = await User.findOne({ username })
 
       if (emailExist) {
-        return res.status(403).json({
+        return res.status(400).json({
           success: false,
           error: 'This email already in used.'
         })
       }
       if (userExist) {
-        return res.status(403).json({
+        return res.status(400).json({
           success: false,
           error: 'This username already in used.'
         })
@@ -53,7 +53,7 @@ const authController = {
       const user = await User.findOne({ email })
 
       if (!user) {
-        return res.status(403).json({
+        return res.status(401).json({
           success: false,
           error: 'Email does not exist.'
         })
@@ -70,7 +70,7 @@ const authController = {
         }, (err, token) => {
 
           res.cookie('mern_session', token, {
-            httpOnly: production,
+            httpOnly: true,
             path: '/',
             maxAge: 7*24*60*60*100,
             secure: production,
@@ -79,7 +79,10 @@ const authController = {
 
           return res.status(201).json({
             success: true,
-            data: token
+            data: {
+              user: user.username,
+              email: user.email
+            }
           })
         })
 
@@ -122,7 +125,7 @@ const authController = {
 
       jwt.verify(mern_session, secretKey, (err, user) => {
         if (err) {
-          res.status(403).json({
+          res.status(401).json({
             success: false,
             error: 'Please login to continue'
           })

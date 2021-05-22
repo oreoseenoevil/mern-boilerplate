@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useContext, Fragment } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import { Link, useHistory } from 'react-router-dom'
 import { Button } from '@material-ui/core'
+import { AuthContext } from '@Context/Auth'
+import axios from 'axios'
+import Cookies from 'js-cookie'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export const Header = () => {
+  const { auth, setAuth } = useContext(AuthContext)
   const classes = useStyles()
   const history = useHistory()
 
@@ -31,10 +35,40 @@ export const Header = () => {
     history.push('/signup')
   }
 
+  const gotoDashboard = () => {
+    history.push('/dashboard')
+  }
+
+  const logoutUser = async () => {
+    await axios.get('/api/user/logout')
+    setAuth(false)
+    Cookies.remove('dotcom_user')
+    history.push('/')
+  }
+
 
   const linkStyle = {
     color: 'inherit',
     textDecoration: 'none'
+  }
+
+  const loggedRouter = () => {
+    return (
+      <Fragment>
+        <Button
+          color="inherit"
+          onClick={gotoSignin}
+        >
+          Sign in
+        </Button>
+        <Button
+          color="inherit"
+          onClick={gotoSignup}
+        >
+          Sign up
+        </Button>
+      </Fragment>
+    )
   }
   
   return (
@@ -44,18 +78,12 @@ export const Header = () => {
           <Typography variant="h6" className={classes.title}>
             <Link to="/" style={linkStyle}>Home</Link>
           </Typography>
-          <Button
-            color="inherit"
-            onClick={gotoSignin}
-          >
-            Sign in
-          </Button>
-          <Button
-            color="inherit"
-            onClick={gotoSignup}
-          >
-            Sign up
-          </Button>
+          { auth ? (
+            <Fragment>
+              <Button color="inherit" onClick={gotoDashboard}>Dashboard</Button>
+              <Button color="inherit" onClick={logoutUser}>Sign out</Button>
+            </Fragment>
+          ) : loggedRouter() }
         </Toolbar>
       </AppBar>
     </div>

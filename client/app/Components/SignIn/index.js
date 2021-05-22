@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import axios from 'axios'
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
@@ -14,7 +14,8 @@ import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
 import { useHistory } from 'react-router-dom'
-import { login } from '@Utils'
+import { AuthContext } from '@Context/Auth'
+import Cookies from 'js-cookie'
 
 function Copyright() {
   return (
@@ -52,6 +53,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export const SignIn = () => {
+  const { setAuth } = useContext(AuthContext)
   const history = useHistory()
   const [user, setUser] = useState({
     email: '',
@@ -67,10 +69,11 @@ export const SignIn = () => {
     e.preventDefault()
     try {
       const res = await axios.post('/api/user/login', { ...user})
-      login(res.data.data)
+      Cookies.set('dotcom_user', res.data.data.user)
+      setAuth(true)
       history.push('/dashboard')
     } catch (error) {
-      console.log(error.response.data.error)
+      alert(error.response.data.error)
     }
   }
 
